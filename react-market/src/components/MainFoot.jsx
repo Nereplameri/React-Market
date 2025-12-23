@@ -9,7 +9,7 @@ export default function MainFoot() {
             <div className="row h-100">
               <div className="col-4 setFlexsMiddle">
                 <button
-                  claclassNamess="btn btn-success w-100"
+                  className="btn btn-success w-100"
                   style={{ height: "80%" }}
                 >
                   <i className="fa-solid fa-check"></i>
@@ -18,7 +18,7 @@ export default function MainFoot() {
 
               <div className="col-4 setFlexsMiddle">
                 <button
-                  clasclassNames="btn btn-danger w-100"
+                  className="btn btn-danger w-100"
                   style={{ height: "80%" }}
                 >
                   <i className="fa-solid fa-x"></i>
