@@ -2,9 +2,10 @@ import ListEntities from "../components/ListEntites";
 import Navbar from "../components/Navbar";
 
 export default function ProductList() {
+  // Saf data
   const prodcts = [
     {
-      key: 8,
+      id: 8,
       name: "Eti Lifalif Granola Kuru Vişneli, Kakao Parçacıklı, Fındıklı 200 g",
       sellPrice: 134.0,
       isPresented: "true",
@@ -13,7 +14,7 @@ export default function ProductList() {
       brandId: 2,
     },
     {
-      key: 9,
+      id: 9,
       name: "Eti Gong Mısır ve Pirinç Patlağı 64 G",
       sellPrice: 10.0,
       isPresented: "true",
@@ -23,6 +24,10 @@ export default function ProductList() {
     },
   ];
 
+  // UI işlemi için gönderilen veriden filitrelenecek field 'ler
+  const UIFiliter = ["id"];
+
+  // Tablo sütunlarının isimleri
   const tableHead = [
     "Numara",
     "Adı",
@@ -36,7 +41,11 @@ export default function ProductList() {
   return (
     <>
       <Navbar />
-      <ListEntities data={prodcts} tableHead={tableHead} />
+      <ListEntities
+        data={prodcts}
+        tableHead={tableHead}
+        UIFiliter={UIFiliter}
+      />
     </>
   );
 }
