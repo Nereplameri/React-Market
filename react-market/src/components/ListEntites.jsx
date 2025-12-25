@@ -1,5 +1,3 @@
-// Data: Ekrana yazılacak JSON veri.
-// TableHead: Json veriler tablo halde yazılabilmesi için gereken başlıkların listesi. Örneğin: ["id", "Adı", ...]
 export default function ListEntities({ data, tableHead, UIFiliter }) {
   // Objenin value 'lerini listeye döküp, iteratif hale getiriyoruz
   let list = [];
@@ -8,11 +6,11 @@ export default function ListEntities({ data, tableHead, UIFiliter }) {
   }
   // ------------- \\
 
+  //MODAL
   // Database 'ye veri göndermek için Modal 'da gösterilecek yapıyı ayarlıyoruz.
 
   let dataField = Object.keys(data[0]);
 
-  console.log(dataField);
   for (let forbiden of UIFiliter)
     if (dataField.includes(forbiden)) {
       let iTarget = dataField.indexOf(forbiden);
@@ -56,7 +54,7 @@ export default function ListEntities({ data, tableHead, UIFiliter }) {
               <div className="modal-body">
                 <form>
                   {dataField.map((m) => (
-                    <div className="row">
+                    <div className="row mt-2">
                       <div className="col-3 setFlexsMiddle">
                         <label name="Ad" className="form-label m-0">
                           {m}
@@ -103,7 +101,7 @@ export default function ListEntities({ data, tableHead, UIFiliter }) {
                     <button>Sa</button>
                   </td>
                   {m.map((n) => (
-                    <td>{n}</td>
+                    <td>{n}</td> //HERE!!!
                   ))}
                 </tr>
               </>

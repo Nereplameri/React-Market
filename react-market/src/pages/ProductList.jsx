@@ -1,48 +1,47 @@
 import ListEntities from "../components/ListEntites";
 import Navbar from "../components/Navbar";
+import { useEffect, useState } from "react";
+import useFetch from "../hook/useFetch";
 
 export default function ProductList() {
-  // Saf data
-  const prodcts = [
-    {
-      id: 8,
-      name: "Eti Lifalif Granola Kuru Vişneli, Kakao Parçacıklı, Fındıklı 200 g",
-      sellPrice: 134.0,
-      isPresented: "true",
-      barcode: "8690526014609",
-      remainingQuentity: 20,
-      brandId: 2,
-    },
-    {
-      id: 9,
-      name: "Eti Gong Mısır ve Pirinç Patlağı 64 G",
-      sellPrice: 10.0,
-      isPresented: "true",
-      barcode: "8690526084671",
-      remainingQuentity: 20,
-      brandId: 2,
-    },
-  ];
+  // Fetch Data
+
+  const [fetchData, setData] = useState([{}]);
+
+  const url =
+    "http://localhost:8080/rest/api/product/list/product?pageNumber=0&pageSize=10&columnName=id&asc=true";
+  const requestMethod = "GET";
+  const jsonPath = ["payload", "content"];
+  const deleteFields = ["createTime", "brand", "presented"];
+
+  const request = useFetch(url, requestMethod, jsonPath, deleteFields);
+  console.log("Fetched Data:", request);
+
+  // ------------ \\
 
   // UI işlemi için gönderilen veriden filitrelenecek field 'ler
-  const UIFiliter = ["id"];
+  const UIFiliter = ["id", "createTime"];
 
   // Tablo sütunlarının isimleri
   const tableHead = [
     "Numara",
     "Adı",
     "Satış ücreti",
-    "Satışta mı",
+    "Satış Ücreti",
     "Barkod",
     "Kalan ürün",
-    "Marka ID",
+    "STT",
   ];
+
+  if (request === null) {
+    return <p>Yükleniyor...</p>;
+  }
 
   return (
     <>
       <Navbar />
       <ListEntities
-        data={prodcts}
+        data={request}
         tableHead={tableHead}
         UIFiliter={UIFiliter}
       />
