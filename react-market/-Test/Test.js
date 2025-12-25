@@ -1,5 +1,5 @@
-const obj = { a: "kk", b: "jj", c: "hh" };
+let array = [];
 
-delete obj["a"];
-
-console.log(obj);
+if (array.length == 0) {
+  console.log("AAAAAAAA");
+}

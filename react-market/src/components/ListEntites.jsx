@@ -1,4 +1,11 @@
-export default function ListEntities({ data, tableHead, UIFiliter }) {
+// ButtonFuncList = {nextpage: }
+export default function ListEntities({
+  data,
+  tableHead,
+  UIFiliter,
+  buttonFuncs,
+  metadata,
+}) {
   // Objenin value 'lerini listeye döküp, iteratif hale getiriyoruz
   let list = [];
   for (let i of data) {
@@ -101,13 +108,43 @@ export default function ListEntities({ data, tableHead, UIFiliter }) {
                     <button>Sa</button>
                   </td>
                   {m.map((n) => (
-                    <td>{n}</td> //HERE!!!
+                    <td>{n}</td>
                   ))}
                 </tr>
               </>
             ))}
           </tbody>
         </table>
+
+        {/* Pageable sistemi */}
+        <div className="container" style={{ height: "8vh" }}>
+          <div className="row setFlexsMiddle">
+            <button
+              className="col-1 border setFlexsMiddle"
+              style={{ height: "50px", width: "50px" }}
+              onClick={buttonFuncs.previouspage}
+            >
+              <i class="fa-solid fa-left-long"></i>
+            </button>
+
+            <div
+              className="col-1 border setFlexsMiddle"
+              style={{ height: "50px" }}
+            >
+              <p>
+                {metadata.pagenumber + 1} / {metadata.maxpage + 1}
+              </p>
+            </div>
+
+            <button
+              className="col-1 border setFlexsMiddle"
+              style={{ height: "50px", width: "50px" }}
+              onClick={buttonFuncs.nextpage}
+            >
+              <i class="fa-solid fa-right-long"></i>
+            </button>
+          </div>
+        </div>
       </section>
     </>
   );

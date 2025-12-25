@@ -17,6 +17,10 @@ export default function useFetch(
   }
 
   function jsonDeleteField(data) {
+    if (deleteFields.length == 0) {
+      return data;
+    }
+
     for (let items of data) {
       for (let taboo of deleteFields) {
         delete items[taboo];
@@ -51,5 +55,6 @@ export default function useFetch(
         console.error("Fetch error:", error);
       });
   }, [url]);
+
   return fetchData;
 }
