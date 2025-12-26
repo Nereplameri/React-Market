@@ -225,19 +225,15 @@ export default function ProductListBody() {
     data2.purchasePrice = parseFloat(data2.purchasePrice);
     data2.sellPrice = parseFloat(data2.sellPrice);
     data2.remainingProductQuantity = parseInt(data2.remainingProductQuantity);
-    data2.brand = parseInt(data2.brand);
+    // data2.brand = parseInt(data2.brand);
     data2.presented = true;
 
-    fetch(
-      `http://localhost:8080/rest/api/product/updateProduct/${editForm.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data2),
-      }
-    )
+    fetch(`http://localhost:8080/rest/api/brand/getBrandName/${data2.brand}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("HTTP error " + response.status);
@@ -245,13 +241,18 @@ export default function ProductListBody() {
         return response.json();
       })
       .then((data) => {
-        e.target.reset();
-        fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        data2.brand = data.payload.id;
+
+        fetch(
+          `http://localhost:8080/rest/api/product/updateProduct/${editForm.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data2),
+          }
+        )
           .then((response) => {
             if (!response.ok) {
               throw new Error("HTTP error " + response.status);
@@ -259,9 +260,27 @@ export default function ProductListBody() {
             return response.json();
           })
           .then((data) => {
-            setTotalElements(data.payload.totalElements);
+            e.target.reset();
+            fetch(url, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                setTotalElements(data.payload.totalElements);
 
-            setData(data.payload.content);
+                setData(data.payload.content);
+              })
+              .catch((error) => {
+                console.error("Fetch error:", error);
+              });
           })
           .catch((error) => {
             console.error("Fetch error:", error);
@@ -559,11 +578,11 @@ export default function ProductListBody() {
                     </div>
                   </div>
 
-                  {/* Firma No */}
+                  {/* Firma Adı */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
                       <label name="brand" className="form-label m-0">
-                        Firma No
+                        Firma Adı
                       </label>
                     </div>
                     <div className="col-9">
