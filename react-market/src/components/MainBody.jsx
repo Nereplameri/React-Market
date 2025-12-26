@@ -1,7 +1,7 @@
 import FreshProductButtons from "./FreshProductButtons";
 import MainProductStage from "./MainProductStage";
 
-export default function MainBody() {
+export default function MainBody(setItems) {
   return (
     <>
       <div className="container" style={{ height: "75vh" }}>
@@ -56,7 +56,7 @@ export default function MainBody() {
               style={{ height: "67vh", overflowY: "scroll" }}
             >
               <div className="row" style={{ height: "20%" }}>
-                <FreshProductButtons />
+                <FreshProductButtons setItems={setItems} />
               </div>
             </div>
           </aside>

@@ -1,166 +1,28 @@
-export default function FreshProductButtons() {
+import useFetch from "../hook/useFetch";
+
+export default function FreshProductButtons(setItems) {
+  const url =
+    "http://localhost:8080/rest/api/freshProduce/list/freshProduce?pageNumber=0&pageSize=100&columnName=id&asc=true";
+  const jsonPath = ["payload", "content"];
+
+  const freshProductItemList = useFetch(url, "GET", jsonPath);
+
+  console.log(freshProductItemList);
+
+  if (freshProductItemList === null) {
+    return <p>Yükleniyor...</p>;
+  }
   return (
     <>
-      <div className="col-4 setFlexsMiddle mt-2 ">
-        <button className="btn btn-primary h-100 w-100">
-          bbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab
-        </button>
-      </div>
-      {/* Alttakiler tekrarlar. list.map ile üsttekini tekrarlayacaklar. */}
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">aaaa</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
-
-      <div className="col-4 setFlexsMiddle mt-2">
-        <button className="btn btn-primary h-100 w-100">cccc</button>
-      </div>
+      {freshProductItemList.map((m) => {
+        return (
+          <div className="col-4 setFlexsMiddle mt-2">
+            <button className="btn btn-primary h-100 w-100" id={m.id}>
+              {m.name}
+            </button>
+          </div>
+        );
+      })}
     </>
   );
 }

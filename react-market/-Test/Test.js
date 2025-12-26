@@ -1,5 +1,3 @@
-let array = [];
+let obj = {};
 
-if (array.length == 0) {
-  console.log("AAAAAAAA");
-}
+console.log(Object.prototype.toString.call(obj) === "[object Object]");
