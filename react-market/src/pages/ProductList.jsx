@@ -55,20 +55,6 @@ export default function ProductList() {
   // const metadata = { maxpage: maxPage, pagenumber: pageNumber };
   // // ------------ \\
 
-  // // UI işlemi için gönderilen veriden filitrelenecek field 'ler
-  // const UIFiliter = ["id", "createTime"];
-
-  // // Tablo sütunlarının isimleri
-  // const tableHead = [
-  //   "Numara",
-  //   "Adı",
-  //   "Satış ücreti",
-  //   "Satış Ücreti",
-  //   "Barkod",
-  //   "Kalan ürün",
-  //   "STT",
-  // ];
-
   // // Butonlara işlevsellik listesi:::
 
   // function nextPage() {
