@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-export default function ProductListBody() {
+export default function BrandListBody() {
   const [hamData, setData] = useState(); //List
   // --------------------Untainted data
   const [totalElements, setTotalElements] = useState();
   const [pageNumber, setPageNumber] = useState(0);
   const pageSize = 10;
 
-  let url = `http://localhost:8080/rest/api/product/list/product?pageNumber=${pageNumber}&pageSize=${pageSize}&columnName=id&asc=true`;
+  let url = `http://localhost:8080/rest/api/brand/list/brand?pageNumber=${pageNumber}&pageSize=${pageSize}&columnName=id&asc=true`;
 
   useEffect(() => {
     fetch(url, {
@@ -39,11 +39,8 @@ export default function ProductListBody() {
   const [editForm, setEditForm] = useState({
     id: "",
     name: "",
-    purchasePrice: "",
-    sellPrice: "",
-    barcode: "",
-    remainingProductQuantity: "",
-    brand: "",
+    phoneNumber: "",
+    email: "",
   });
 
   // --------------------Buton Fonksiyonları
@@ -86,7 +83,7 @@ export default function ProductListBody() {
   function searchByBarcode(e) {
     e.preventDefault();
 
-    url = `http://localhost:8080/rest/api/product/getProductByBarcode/${e.target.childNodes[0].value}`;
+    url = `http://localhost:8080/rest/api/brand/getBrandName/${e.target.childNodes[0].value}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -117,13 +114,7 @@ export default function ProductListBody() {
 
     const data2 = Object.fromEntries(formData.entries());
 
-    data2.purchasePrice = parseFloat(data2.purchasePrice);
-    data2.sellPrice = parseFloat(data2.sellPrice);
-    data2.remainingProductQuantity = parseInt(data2.remainingProductQuantity);
-    data2.brand = parseInt(data2.brand);
-    data2.presented = true;
-
-    fetch("http://localhost:8080/rest/api/product/addProduct", {
+    fetch("http://localhost:8080/rest/api/brand/saveBrand", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -165,7 +156,7 @@ export default function ProductListBody() {
   }
 
   function deleteProduct(d) {
-    fetch(`http://localhost:8080/rest/api/product/deleteProduct/${d.id}`, {
+    fetch(`http://localhost:8080/rest/api/brand/deleteBrand/${d.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -208,11 +199,8 @@ export default function ProductListBody() {
     setEditForm({
       id: d.id ?? "",
       name: d.name ?? "",
-      purchasePrice: d.purchasePrice ?? "",
-      sellPrice: d.sellPrice ?? "",
-      barcode: d.barcode ?? "",
-      remainingProductQuantity: d.remainingProductQuantity ?? "",
-      brand: d.brand?.name ?? "",
+      phoneNumber: d.phoneNumber ?? "",
+      email: d.email ?? "",
     });
   }
 
@@ -222,17 +210,12 @@ export default function ProductListBody() {
 
     const data2 = Object.fromEntries(formData.entries());
 
-    data2.purchasePrice = parseFloat(data2.purchasePrice);
-    data2.sellPrice = parseFloat(data2.sellPrice);
-    data2.remainingProductQuantity = parseInt(data2.remainingProductQuantity);
-    // data2.brand = parseInt(data2.brand);
-    data2.presented = true;
-
-    fetch(`http://localhost:8080/rest/api/brand/getBrandName/${data2.brand}`, {
-      method: "GET",
+    fetch(`http://localhost:8080/rest/api/brand/updateBrand/${editForm.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data2),
     })
       .then((response) => {
         if (!response.ok) {
@@ -241,18 +224,13 @@ export default function ProductListBody() {
         return response.json();
       })
       .then((data) => {
-        data2.brand = data.payload.id;
-
-        fetch(
-          `http://localhost:8080/rest/api/product/updateProduct/${editForm.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data2),
-          }
-        )
+        e.target.reset();
+        fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
           .then((response) => {
             if (!response.ok) {
               throw new Error("HTTP error " + response.status);
@@ -260,27 +238,9 @@ export default function ProductListBody() {
             return response.json();
           })
           .then((data) => {
-            e.target.reset();
-            fetch(url, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("HTTP error " + response.status);
-                }
-                return response.json();
-              })
-              .then((data) => {
-                setTotalElements(data.payload.totalElements);
+            setTotalElements(data.payload.totalElements);
 
-                setData(data.payload.content);
-              })
-              .catch((error) => {
-                console.error("Fetch error:", error);
-              });
+            setData(data.payload.content);
           })
           .catch((error) => {
             console.error("Fetch error:", error);
@@ -289,13 +249,33 @@ export default function ProductListBody() {
       .catch((error) => {
         console.error("Fetch error:", error);
       });
+
+    // fetch(`http://localhost:8080/rest/api/brand/getBrandName/${data2.brand}`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("HTTP error " + response.status);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     data2.brand = data.payload.id;
+
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch error:", error);
+    //   });
   }
   // --------------------Buton Fonksiyonları
 
   if (hamData === undefined) {
     return <p>Yükleniyor...</p>;
   }
-  //   console.log("HamData:", hamData);
+  console.log("HamData:", hamData);
 
   return (
     <>
@@ -351,84 +331,33 @@ export default function ProductListBody() {
                     </div>
                   </div>
 
-                  {/* Satın alma ücreti */}
+                  {/* phoneNumber */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="purchasePrice" className="form-label m-0">
-                        Satın alma ücreti
+                      <label name="phoneNumber" className="form-label m-0">
+                        Telefon No
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="purchasePrice"
+                        name="phoneNumber"
                         className="form-control"
                       />
                     </div>
                   </div>
 
-                  {/* Satma ücreti */}
+                  {/* email */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="sellPrice" className="form-label m-0">
-                        Satma ücreti
+                      <label name="email" className="form-label m-0">
+                        email
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="sellPrice"
-                        className="form-control"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Barkod */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label name="barcode" className="form-label m-0">
-                        Barkod
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="barcode"
-                        className="form-control"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Kalan ürün */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label
-                        name="remainingProductQuantity"
-                        className="form-label m-0"
-                      >
-                        Kalan Ürün
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="remainingProductQuantity"
-                        className="form-control"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Firma No */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label name="brand" className="form-label m-0">
-                        Firma No
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="brand"
+                        name="email"
                         className="form-control"
                       />
                     </div>
@@ -486,113 +415,47 @@ export default function ProductListBody() {
                     </div>
                   </div>
 
-                  {/* Satın alma ücreti */}
+                  {/* phoneNumber */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="purchasePrice" className="form-label m-0">
-                        Satın alma ücreti
+                      <label name="phoneNumber" className="form-label m-0">
+                        Telefon Numarası
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="purchasePrice"
+                        name="phoneNumber"
                         className="form-control"
-                        value={editForm.purchasePrice}
+                        value={editForm.phoneNumber}
                         onChange={(e) =>
                           setEditForm({
                             ...editForm,
-                            purchasePrice: e.target.value,
+                            phoneNumber: e.target.value,
                           })
                         }
                       />
                     </div>
                   </div>
 
-                  {/* Satma ücreti */}
+                  {/* email */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="sellPrice" className="form-label m-0">
-                        Satma ücreti
+                      <label name="email" className="form-label m-0">
+                        E-mail
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="sellPrice"
+                        name="email"
                         className="form-control"
-                        value={editForm.sellPrice}
+                        value={editForm.email}
                         onChange={(e) =>
                           setEditForm({
                             ...editForm,
-                            sellPrice: e.target.value,
+                            email: e.target.value,
                           })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  {/* Barkod */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label name="barcode" className="form-label m-0">
-                        Barkod
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="barcode"
-                        className="form-control"
-                        value={editForm.barcode}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, barcode: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  {/* Kalan ürün */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label
-                        name="remainingProductQuantity"
-                        className="form-label m-0"
-                      >
-                        Kalan Ürün
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="remainingProductQuantity"
-                        className="form-control"
-                        value={editForm.remainingProductQuantity}
-                        onChange={(e) =>
-                          setEditForm({
-                            ...editForm,
-                            remainingProductQuantity: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  {/* Firma Adı */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label name="brand" className="form-label m-0">
-                        Firma Adı
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="brand"
-                        className="form-control"
-                        value={editForm.brand}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, brand: e.target.value })
                         }
                       />
                     </div>
@@ -623,11 +486,8 @@ export default function ProductListBody() {
               <th>İşlem</th>
               <th>ID</th>
               <th>Adı</th>
-              <th>Satın alma ücreti</th>
-              <th>Satma ücreti</th>
-              <th>Barkod</th>
-              <th>Kalan ürün</th>
-              <th>Firma adı</th>
+              <th>Telefon No</th>
+              <th>E-mail</th>
             </tr>
           </thead>
 
@@ -653,11 +513,8 @@ export default function ProductListBody() {
                 </td>
                 <td>{d.id}</td>
                 <td>{d.name}</td>
-                <td>{d.purchasePrice}</td>
-                <td>{d.sellPrice}</td>
-                <td>{d.barcode}</td>
-                <td>{d.remainingProductQuantity}</td>
-                <td>{d.brand.name}</td>
+                <td>{d.phoneNumber}</td>
+                <td>{d.email}</td>
               </tr>
             ))}
           </tbody>

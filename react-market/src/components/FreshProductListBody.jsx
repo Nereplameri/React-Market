@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-export default function ProductListBody() {
+export default function FreshProductListBody() {
   const [hamData, setData] = useState(); //List
   // --------------------Untainted data
   const [totalElements, setTotalElements] = useState();
   const [pageNumber, setPageNumber] = useState(0);
   const pageSize = 10;
 
-  let url = `http://localhost:8080/rest/api/product/list/product?pageNumber=${pageNumber}&pageSize=${pageSize}&columnName=id&asc=true`;
+  let url = `http://localhost:8080/rest/api/freshProduce/list/freshProduce?pageNumber=${pageNumber}&pageSize=${pageSize}&columnName=id&asc=true`;
 
   useEffect(() => {
     fetch(url, {
@@ -39,10 +39,10 @@ export default function ProductListBody() {
   const [editForm, setEditForm] = useState({
     id: "",
     name: "",
-    purchasePrice: "",
-    sellPrice: "",
-    barcode: "",
-    remainingProductQuantity: "",
+    quantity: "",
+    unitType: "",
+    unitPurchasePrice: "",
+    unitSellPrice: "",
     brand: "",
   });
 
@@ -86,7 +86,7 @@ export default function ProductListBody() {
   function searchByBarcode(e) {
     e.preventDefault();
 
-    url = `http://localhost:8080/rest/api/product/getProductByBarcode/${e.target.childNodes[0].value}`;
+    url = `http://localhost:8080/rest/api/freshProduce/getByName/${e.target.childNodes[0].value}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -117,13 +117,13 @@ export default function ProductListBody() {
 
     const data2 = Object.fromEntries(formData.entries());
 
-    data2.purchasePrice = parseFloat(data2.purchasePrice);
-    data2.sellPrice = parseFloat(data2.sellPrice);
-    data2.remainingProductQuantity = parseInt(data2.remainingProductQuantity);
-    data2.brand = parseInt(data2.brand);
-    data2.presented = true;
+    data2.quantity = parseFloat(data2.quantity);
+    data2.unitPurchasePrice = parseFloat(data2.unitPurchasePrice);
+    data2.unitSellPrice = parseFloat(data2.unitSellPrice);
 
-    fetch("http://localhost:8080/rest/api/product/addProduct", {
+    data2.brand = parseInt(data2.brand);
+
+    fetch("http://localhost:8080/rest/api/freshProduce/saveFreshProduce", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -165,12 +165,15 @@ export default function ProductListBody() {
   }
 
   function deleteProduct(d) {
-    fetch(`http://localhost:8080/rest/api/product/deleteProduct/${d.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://localhost:8080/rest/api/freshProduce/deleteFreshProduce/${d.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("HTTP error " + response.status);
@@ -208,10 +211,10 @@ export default function ProductListBody() {
     setEditForm({
       id: d.id ?? "",
       name: d.name ?? "",
-      purchasePrice: d.purchasePrice ?? "",
-      sellPrice: d.sellPrice ?? "",
-      barcode: d.barcode ?? "",
-      remainingProductQuantity: d.remainingProductQuantity ?? "",
+      quantity: d.quantity ?? "",
+      unitType: d.unitType ?? "",
+      unitPurchasePrice: d.unitPurchasePrice ?? "",
+      unitSellPrice: d.unitSellPrice ?? "",
       brand: d.brand?.name ?? "",
     });
   }
@@ -222,11 +225,11 @@ export default function ProductListBody() {
 
     const data2 = Object.fromEntries(formData.entries());
 
-    data2.purchasePrice = parseFloat(data2.purchasePrice);
-    data2.sellPrice = parseFloat(data2.sellPrice);
-    data2.remainingProductQuantity = parseInt(data2.remainingProductQuantity);
-    // data2.brand = parseInt(data2.brand);
-    data2.presented = true;
+    data2.quantity = parseFloat(data2.quantity);
+    data2.unitPurchasePrice = parseFloat(data2.unitPurchasePrice);
+    data2.unitSellPrice = parseFloat(data2.unitSellPrice);
+
+    console.log("DEBUGG:", data2);
 
     fetch(`http://localhost:8080/rest/api/brand/getBrandName/${data2.brand}`, {
       method: "GET",
@@ -244,7 +247,7 @@ export default function ProductListBody() {
         data2.brand = data.payload.id;
 
         fetch(
-          `http://localhost:8080/rest/api/product/updateProduct/${editForm.id}`,
+          `http://localhost:8080/rest/api/freshProduce/updateFreshProduce/${editForm.id}`,
           {
             method: "PUT",
             headers: {
@@ -295,7 +298,7 @@ export default function ProductListBody() {
   if (hamData === undefined) {
     return <p>Yükleniyor...</p>;
   }
-  //   console.log("HamData:", hamData);
+  console.log("HamData:", hamData);
 
   return (
     <>
@@ -351,68 +354,68 @@ export default function ProductListBody() {
                     </div>
                   </div>
 
-                  {/* Satın alma ücreti */}
+                  {/* quantity */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="purchasePrice" className="form-label m-0">
-                        Satın alma ücreti
+                      <label name="quantity" className="form-label m-0">
+                        Miktarı
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="purchasePrice"
+                        name="quantity"
                         className="form-control"
                       />
                     </div>
                   </div>
 
-                  {/* Satma ücreti */}
+                  {/* unitType */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="sellPrice" className="form-label m-0">
-                        Satma ücreti
+                      <label name="unitType" className="form-label m-0">
+                        Birimi
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="sellPrice"
+                        name="unitType"
                         className="form-control"
                       />
                     </div>
                   </div>
 
-                  {/* Barkod */}
-                  <div className="row mt-2">
-                    <div className="col-3 setFlexsMiddle">
-                      <label name="barcode" className="form-label m-0">
-                        Barkod
-                      </label>
-                    </div>
-                    <div className="col-9">
-                      <input
-                        type="text"
-                        name="barcode"
-                        className="form-control"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Kalan ürün */}
+                  {/* unitPurchasePrice */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
                       <label
-                        name="remainingProductQuantity"
+                        name="unitPurchasePrice"
                         className="form-label m-0"
                       >
-                        Kalan Ürün
+                        Birim satın alma miktarı
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="remainingProductQuantity"
+                        name="unitPurchasePrice"
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  {/* unitSellPrice */}
+                  <div className="row mt-2">
+                    <div className="col-3 setFlexsMiddle">
+                      <label name="unitSellPrice" className="form-label m-0">
+                        Birim satma fiyatı
+                      </label>
+                    </div>
+                    <div className="col-9">
+                      <input
+                        type="text"
+                        name="unitSellPrice"
                         className="form-control"
                       />
                     </div>
@@ -489,64 +492,70 @@ export default function ProductListBody() {
                   {/* Satın alma ücreti */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="purchasePrice" className="form-label m-0">
-                        Satın alma ücreti
+                      <label name="quantity" className="form-label m-0">
+                        Miktarı
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="purchasePrice"
+                        name="quantity"
                         className="form-control"
-                        value={editForm.purchasePrice}
+                        value={editForm.quantity}
                         onChange={(e) =>
                           setEditForm({
                             ...editForm,
-                            purchasePrice: e.target.value,
+                            quantity: e.target.value,
                           })
                         }
                       />
                     </div>
                   </div>
 
-                  {/* Satma ücreti */}
+                  {/* unitType */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="sellPrice" className="form-label m-0">
-                        Satma ücreti
+                      <label name="unitType" className="form-label m-0">
+                        Birim fiyatı
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="sellPrice"
+                        name="unitType"
                         className="form-control"
-                        value={editForm.sellPrice}
+                        value={editForm.unitType}
                         onChange={(e) =>
                           setEditForm({
                             ...editForm,
-                            sellPrice: e.target.value,
+                            unitType: e.target.value,
                           })
                         }
                       />
                     </div>
                   </div>
 
-                  {/* Barkod */}
+                  {/* unitPurchasePrice */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label name="barcode" className="form-label m-0">
-                        Barkod
+                      <label
+                        name="unitPurchasePrice"
+                        className="form-label m-0"
+                      >
+                        Birim satın alma fiyatı
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="barcode"
+                        name="unitPurchasePrice"
                         className="form-control"
-                        value={editForm.barcode}
+                        value={editForm.unitPurchasePrice}
                         onChange={(e) =>
-                          setEditForm({ ...editForm, barcode: e.target.value })
+                          setEditForm({
+                            ...editForm,
+                            unitPurchasePrice: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -555,23 +564,20 @@ export default function ProductListBody() {
                   {/* Kalan ürün */}
                   <div className="row mt-2">
                     <div className="col-3 setFlexsMiddle">
-                      <label
-                        name="remainingProductQuantity"
-                        className="form-label m-0"
-                      >
-                        Kalan Ürün
+                      <label name="unitSellPrice" className="form-label m-0">
+                        Birim satma fiyatı
                       </label>
                     </div>
                     <div className="col-9">
                       <input
                         type="text"
-                        name="remainingProductQuantity"
+                        name="unitSellPrice"
                         className="form-control"
-                        value={editForm.remainingProductQuantity}
+                        value={editForm.unitSellPrice}
                         onChange={(e) =>
                           setEditForm({
                             ...editForm,
-                            remainingProductQuantity: e.target.value,
+                            unitSellPrice: e.target.value,
                           })
                         }
                       />
@@ -623,11 +629,11 @@ export default function ProductListBody() {
               <th>İşlem</th>
               <th>ID</th>
               <th>Adı</th>
-              <th>Satın alma ücreti</th>
-              <th>Satma ücreti</th>
-              <th>Barkod</th>
-              <th>Kalan ürün</th>
-              <th>Firma adı</th>
+              <th>Miktar</th>
+              <th>Birim</th>
+              <th>Birim alma fiyatı</th>
+              <th>Birim Satma fiyatı</th>
+              <th>Firma Adı</th>
             </tr>
           </thead>
 
@@ -653,10 +659,10 @@ export default function ProductListBody() {
                 </td>
                 <td>{d.id}</td>
                 <td>{d.name}</td>
-                <td>{d.purchasePrice}</td>
-                <td>{d.sellPrice}</td>
-                <td>{d.barcode}</td>
-                <td>{d.remainingProductQuantity}</td>
+                <td>{d.quantity}</td>
+                <td>{d.unitType}</td>
+                <td>{d.unitPurchasePrice}</td>
+                <td>{d.unitSellPrice}</td>
                 <td>{d.brand.name}</td>
               </tr>
             ))}
