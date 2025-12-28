@@ -1,3 +1,4 @@
+import { Alert } from "bootstrap";
 import { useNavigate } from "react-router";
 
 export default function Authenticate() {
@@ -11,8 +12,13 @@ export default function Authenticate() {
 
     const data2 = Object.fromEntries(formData.entries());
 
+    if (data2.pwd == "" || data2.pwd2 == "" || data2.username == "") {
+      alert("Şifre alanını ve kullanıcı adını doldurun");
+      return;
+    }
+
     if (data2.pwd !== data2.pwd2) {
-      console.log("Şifreler aynı değil");
+      alert("Şifreler aynı değil");
       return;
     }
 
@@ -74,6 +80,7 @@ export default function Authenticate() {
         })
         .catch((error) => {
           console.error("Fetch error:", error);
+          alert("Hesap bilgileri yanlış");
         });
     }
   }

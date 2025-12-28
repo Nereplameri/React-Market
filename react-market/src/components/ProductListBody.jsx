@@ -280,6 +280,7 @@ export default function ProductListBody() {
                 setTotalElements(data.payload.totalElements);
 
                 setData(data.payload.content);
+                alert("Kaydetme işlemi Başarılı");
               })
               .catch((error) => {
                 console.error("Fetch error:", error);

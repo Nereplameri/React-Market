@@ -202,6 +202,11 @@ export default function MainBody() {
   }
 
   function confirmButton() {
+    if (stagedProduct === undefined || stagedProduct.length == 0) {
+      alert("Sepet boş");
+      return;
+    }
+
     // stagedProduct
     let reduceFreshProduct = { decreases: [] };
     let reduceProduct = { decreases: [] };
@@ -424,7 +429,7 @@ export default function MainBody() {
               </div>
 
               <div className="col-4">
-                <div className="setFlexsMiddle w-100 h-100">
+                <div className="setFlexsMiddle w-100 h-100 bg-white rounded-circle">
                   <p>
                     Toplam tutar <br /> {finalPrice} TL
                   </p>

@@ -244,6 +244,7 @@ export default function BrandListBody() {
             setTotalElements(data.payload.totalElements);
 
             setData(data.payload.content);
+            alert("Kaydetme işlemi Başarılı");
           })
           .catch((error) => {
             console.error("Fetch error:", error);
