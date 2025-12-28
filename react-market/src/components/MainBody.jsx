@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function MainBody(setItems) {
+export default function MainBody() {
   const [manuelRefresh, setManuelRefresh] = useState(true);
   // setManuelRefresh(!manuelRefresh)
   const [freshButtons, setFreshButtons] = useState(); //List
@@ -40,10 +40,9 @@ export default function MainBody(setItems) {
     for (let item of stagedProduct) {
       finalPrice = finalPrice + item.price * item.amount;
     }
-    console.log("Ücret:", finalPrice);
   }
 
-  // Genel fonksiyon
+  // Genel fonksiyonlar
 
   function addToStagedProduct(data) {
     //data = liste
@@ -195,6 +194,77 @@ export default function MainBody(setItems) {
     );
   };
 
+  function denyButton() {
+    setStagedProduct();
+  }
+
+  function confirmButton() {
+    // stagedProduct
+    let reduceFreshProduct = { decreases: [] };
+    let reduceProduct = { decreases: [] };
+
+    for (let item of stagedProduct) {
+      if (item.unitType !== undefined) {
+        // Fresh Product 'ların hepsi burada
+        let jsonList = { primaryId: item.id, decreaseBy: item.amount };
+        reduceFreshProduct.decreases.push(jsonList);
+      } else {
+        // Normal product 'ların hepsi burada.
+        let jsonList = { primaryId: item.id, decreaseBy: item.amount };
+        reduceProduct.decreases.push(jsonList);
+      }
+    }
+    console.log("reduceProduct:", reduceProduct);
+    console.log("reduceFreshProduct:", reduceFreshProduct);
+
+    // Reduce from database
+    if (reduceFreshProduct.decreases.length != 0) {
+      fetch("http://localhost:8080/rest/api/freshProduce/reduceQuentity", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reduceFreshProduct),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Reduce Complated!!!!");
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    }
+
+    if (reduceProduct.decreases.length != 0) {
+      fetch("http://localhost:8080/rest/api/product/reduceQuentity", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reduceProduct),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Reduce Complated!!!!");
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    }
+
+    setStagedProduct();
+  }
+
   //  Buton fonksiyonları
   if (freshButtons === undefined) {
     return <p>Yükleniyor...</p>;
@@ -333,6 +403,7 @@ export default function MainBody(setItems) {
                 <button
                   className="btn btn-success w-100"
                   style={{ height: "80%" }}
+                  onClick={confirmButton}
                 >
                   <i className="fa-solid fa-check"></i>
                 </button>
@@ -342,6 +413,7 @@ export default function MainBody(setItems) {
                 <button
                   className="btn btn-danger w-100"
                   style={{ height: "80%" }}
+                  onClick={denyButton}
                 >
                   <i className="fa-solid fa-x"></i>
                 </button>
