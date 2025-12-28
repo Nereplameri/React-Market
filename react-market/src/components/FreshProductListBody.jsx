@@ -100,7 +100,11 @@ export default function FreshProductListBody() {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         data = data.payload;
+        if (data.length === 0) {
+          alert("Eşleşen içerik bulunamadı");
+        }
         if (Object.prototype.toString.call(data) === "[object Object]") {
           data = [data];
         }
@@ -138,6 +142,7 @@ export default function FreshProductListBody() {
       })
       .then((data) => {
         e.target.reset();
+        alert("İşlem Başarılı");
         fetch(url, {
           method: "GET",
           headers: {
@@ -161,6 +166,7 @@ export default function FreshProductListBody() {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Eksik alanlar bulunmakta");
       });
   }
 

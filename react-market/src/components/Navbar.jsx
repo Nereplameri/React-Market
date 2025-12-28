@@ -1,8 +1,14 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Logo from "../img/Logo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  function returnToAuthenticate() {
+    navigate("/authenticate");
+  }
+
   return (
     <nav className="container" style={{ height: "10vh" }}>
       <div className="row bg-primary h-100">
@@ -29,7 +35,12 @@ export default function Navbar() {
         </div>
         <div className="col-2">
           <div className="h-100">
-            <button className="btn btn-primary w-100 h-100">Çıkış Yap</button>
+            <button
+              className="btn btn-primary w-100 h-100"
+              onClick={returnToAuthenticate}
+            >
+              Çıkış Yap
+            </button>
           </div>
         </div>
       </div>

@@ -92,7 +92,9 @@ export default function MainBody() {
       })
       .then((data) => {
         setFreshButtons(data.payload);
-        console.log(data.payload);
+        if (data.payload.length === 0) {
+          alert("Eşleşen ürün bulunamadı");
+        }
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -144,6 +146,7 @@ export default function MainBody() {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Eşleşen ürün bulunamadı");
       });
 
     console.log(stagedProduct);
@@ -263,6 +266,7 @@ export default function MainBody() {
     }
 
     setStagedProduct();
+    alert("İşlem Başarılı");
   }
 
   //  Buton fonksiyonları
@@ -395,7 +399,7 @@ export default function MainBody() {
       </div>
       <div className="container bg-primary" style={{ height: "15vh" }}>
         <div className="row h-100">
-          <div className="col-6 border">Change Consumer</div>
+          <div className="col-6 border"></div>
 
           <div className="col-6 border">
             <div className="row h-100">

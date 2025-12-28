@@ -1,4 +1,84 @@
+import { useNavigate } from "react-router";
+
 export default function Authenticate() {
+  // Buton fonksiyonları
+  const navigate = useNavigate();
+
+  function registerHandle(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const data2 = Object.fromEntries(formData.entries());
+
+    if (data2.pwd !== data2.pwd2) {
+      console.log("Şifreler aynı değil");
+      return;
+    }
+
+    const requestJson = { username: data2.username, password: data2.pwd };
+
+    // Register fetch
+    if (true) {
+      fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestJson),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Reqgister işlemi başarılı!!!!");
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    }
+  }
+
+  function loginHandle(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const data2 = Object.fromEntries(formData.entries());
+
+    console.log(data2);
+
+    const requestJson = { username: data2.username, password: data2.pwd };
+
+    // Request to server
+    if (true) {
+      fetch("http://localhost:8080/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestJson),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Login Başarılı!", data);
+          navigate("/");
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    }
+  }
+  // Buton fonksiyonları =====================================
+
   return (
     <>
       <div className="container" style={{ height: "5vh" }}></div>
@@ -26,7 +106,7 @@ export default function Authenticate() {
             <p>Giriş Yapın</p>
           </div>
           <div className="card-body">
-            <form>
+            <form onSubmit={loginHandle}>
               <label for="username" className="form-label">
                 Kullanıcı Adınız
               </label>
@@ -51,7 +131,7 @@ export default function Authenticate() {
             <p>Yeni hesap açın</p>
           </div>
           <div className="card-body">
-            <form>
+            <form onSubmit={registerHandle}>
               <label for="username" className="form-label">
                 Kullanıcı Adınız
               </label>

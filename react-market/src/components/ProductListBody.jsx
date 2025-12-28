@@ -108,6 +108,7 @@ export default function ProductListBody() {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Eşleşen ürün bulunamadı");
       });
   }
 
@@ -138,6 +139,7 @@ export default function ProductListBody() {
       })
       .then((data) => {
         e.target.reset();
+        alert("İşlem Başarılı");
         fetch(url, {
           method: "GET",
           headers: {
@@ -161,6 +163,7 @@ export default function ProductListBody() {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Eksik alanlar bulunmakta");
       });
   }
 

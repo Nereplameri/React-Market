@@ -105,6 +105,7 @@ export default function BrandListBody() {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Eşleşen firma bulunamadı");
       });
   }
 
@@ -129,6 +130,7 @@ export default function BrandListBody() {
       })
       .then((data) => {
         e.target.reset();
+        alert("İşlem Başarılı");
         fetch(url, {
           method: "GET",
           headers: {
@@ -152,6 +154,7 @@ export default function BrandListBody() {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Eksik alanlar bulunmakta");
       });
   }
 
